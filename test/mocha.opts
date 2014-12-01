@@ -1,4 +1,0 @@
---require should
---timeout 60000
---compilers coffee:coffee-script/register
---reporter dot
