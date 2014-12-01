@@ -1,6 +1,8 @@
 .*
 /node_modules
-!.travis.yml
+/out
+*.iml
+src/files/vendor/components-bootstrap
+src/files/vendor/jquery
+.docpad.db
 !.gitignore
-/test.coffee
-!/test.coffee.sample

@@ -1,0 +1,184 @@
+
+@import 'nib'
+
+
+gray-dark = #333 // lighten(#000, 20%);   // #333
+gray-light = #999 // ighten(#000, 60%);   // #999
+brand-primary = #428bca
+component-active-color = #fff
+component-active-bg = brand-primary
+
+dropdown-bg = #dc4e10
+dropdown-border = rgba(0,0,0,.15)
+dropdown-fallback-border = #ccc
+dropdown-divider-bg = #e5e5e5
+dropdown-link-color = #fff
+dropdown-link-hover-color = darken(gray-dark, 5%)
+dropdown-link-hover-bg = #f5f5f5
+dropdown-link-active-color = component-active-color
+dropdown-link-active-bg = component-active-bg
+dropdown-link-disabled-color = gray-light
+dropdown-header-color = gray-light
+dropdown-caret-color = #000
+
+
+#mecano
+  padding-top 50px
+  background-color #e0e7e9
+  h1
+    // margin 0
+    // padding 40px 0 20px 0
+    // background-color #80878a
+    // text-align center
+    code
+      padding 0
+      color #3e484c
+      text-shadow 2px 2px #FFF
+      // color #fff
+      // background-color #80878a
+      background-color transparent
+      border-radius 0
+  li, p
+    code
+      color #427359
+      background-color #f9fbfa
+  h2
+    text-shadow 2px 2px #FFF
+    color #3e484c
+    code
+      color #3e484c
+      background-color #f9fbfa
+  a, a:link
+    cursor pointer
+  code
+    font-family 'courier'
+  table
+    tfoot, tbody
+      th
+        border-top 1px solid #DDD
+  footer
+    padding-bottom 30px
+  .fa
+    position absolute
+    display block
+    margin-top 22px
+    font-size 30px
+
+
+  // Header
+  .navbar-default
+    background-color #4b646d
+    .navbar-header, .navbar-nav>li
+      margin-top 10px
+      height 40px
+      a
+        padding-top 5px
+        color #e2e9ec
+    .navbar-header
+      &.active
+        // background-color #758b94
+        // border-radius top 5px
+        a
+          color #fff
+      &:hover
+        a
+          color #fff
+      &:focus
+        background-color #758b94
+        a
+          color #fff 
+      a
+        margin-left 0
+
+  // Quick links
+  quick()
+    padding 10px
+    text-align center
+    ul
+      width 400px
+      margin 0 auto
+      li
+        display inline-block
+        padding 0 10px
+    a
+      color #fff
+  #quick-core
+    quick()
+    @media (min-width: 768px)
+      ul
+        width 600px
+    font-size 20px
+    background-color #81a594
+    border-top 1px solid #fff
+  #quick-extra
+    quick()
+    font-size 16px
+    background-color #7c9a8c
+    border-bottom 1px solid #fff
+  .container-fluid
+    padding 0
+
+  // .navbar-default .navbar-brand
+  //     color #e5d3cb
+  // .navbar-default .navbar-brand:hover,
+  // .navbar-default .navbar-brand:focus
+  //     color #ffffff
+  // .navbar-default .navbar-nav > li > a
+  //     color #e5d3cb
+  .navbar-default .navbar-nav > li
+    margin-left 5px
+    &:focus // &:hover, 
+      background-color #758b94
+      border-radius top 5px
+  .navbar-default .navbar-nav > li > a:hover,
+  .navbar-default .navbar-nav > li > a:focus
+      color #ffffff
+  .navbar-default .navbar-nav > .active > a, 
+  .navbar-default .navbar-nav > .active > a:hover, 
+  .navbar-default .navbar-nav > .active > a:focus
+      color #fff
+      background-color #758b94
+      border-radius 5px
+      padding-bottom 5px
+  .navbar-default .navbar-nav > .open > a, 
+  .navbar-default .navbar-nav > .open > a:hover, 
+  .navbar-default .navbar-nav > .open > a:focus
+      color #fff
+      background-color #758b94
+      border-radius top 5px
+      border-radius bottom 0
+      padding-bottom 15px
+  .dropdown-menu
+    background-color #758b94
+    // border 1px solid dropdown-border
+    border none
+    .divider
+      nav-divider(dropdown-divider-bg)
+    > li > a
+      color dropdown-link-color
+  .dropdown-menu > li > a
+    &:hover,  &:focus
+      color #fff
+      background-color darken(#758b94, 15%)
+  .dropdown-menu > .active > a
+    &, &:hover, &:focus
+      color #fff
+      background-color #758b94
+  .dropdown-menu > .disabled > a
+    &, &:hover, &:focus
+      color darken(#fff, 15%)
+  .dropdown-menu > .disabled > a
+    &:hover, &:focus
+      text-decoration none;
+      background-color transparent;
+      background-image none; // Remove CSS gradient
+  // .dropdown-header
+  //   color dropdown-header-color
+
+
+  
+
+
+
+
+
