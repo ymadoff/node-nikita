@@ -5,4 +5,5 @@
 src/files/vendor/components-bootstrap
 src/files/vendor/jquery
 .docpad.db
+!.bowerrc
 !.gitignore
