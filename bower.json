@@ -1,6 +1,5 @@
 {
   "name": "mecano-docs",
-  "directory": "./test",
   "dependencies": {
     "components-bootstrap": "~3.1.1"
   },
