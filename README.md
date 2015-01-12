@@ -8,12 +8,12 @@ Simple and flexible HTML, CSS, and Javascript for popular user interface compone
 
 1. Clone the project and run the server
 
-  ``` bash
-  git clone git://github.com/docpad/twitter-bootstrap.docpad.git
-  cd twitter-bootstrap.docpad
-  npm install
-  ./node_modules/.bin/docpad run
-  ```
+``` bash
+git clone git://github.com/docpad/twitter-bootstrap.docpad.git
+cd twitter-bootstrap.docpad
+npm install
+./node_modules/.bin/docpad run
+```
 
 1. [Open http://localhost:9778/](http://localhost:9778/)
 
