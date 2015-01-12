@@ -2,5 +2,15 @@
   "name": "twitter-bootstrap-jade.docpad",
   "dependencies": {
     "components-bootstrap": "~3.1.1"
+  },
+  "preen": {
+    "components-bootstrap": [
+      "css/*.css",
+      "fonts/*",
+      "js/*.js"
+    ],
+    "jquery": [
+      "dist/*.js"
+    ]
   }
 }
