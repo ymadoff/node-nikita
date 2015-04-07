@@ -1,5 +1,5 @@
 
-# `ini(options, [goptions], callback)`
+# `ini(options, callback)`
 
 Write an object as .ini file. Note, we are internally using the [ini] module.
 However, there is a subtile difference. Any key provided with value of 
@@ -86,8 +86,8 @@ require('mecano').ini({
 
 ## Source Code
 
-    module.exports = (goptions, options, callback) ->
-      wrap arguments, (options, callback) ->
+    module.exports = (options, callback) ->
+      wrap @, arguments, (options, callback) ->
         {merge, destination, content, ssh} = options
         options.clean ?= true
         # Validate parameters

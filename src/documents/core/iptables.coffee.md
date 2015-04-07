@@ -1,5 +1,5 @@
 
-# `iptables(options, [goptions], callback)`
+# `iptables(options, callback)`
 
 Iptables  is  used to set up, maintain, and inspect the tables of IPv4 packet 
 filter rules in the Linux kernel.
@@ -86,8 +86,8 @@ require('mecano').iptables({
 
 ## Source Code
 
-    module.exports = (goptions, options, callback) ->
-      wrap arguments, (options, callback) ->
+    module.exports = (options, callback) ->
+      wrap @, arguments, (options, callback) ->
         options.log? "Mecano `iptables`: list existing rules"
         execute
           cmd: "service iptables status &>/dev/null && iptables -S"

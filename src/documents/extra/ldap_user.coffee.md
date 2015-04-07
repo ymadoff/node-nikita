@@ -1,5 +1,5 @@
 
-# `ldap_user(options, [goptions], callback)`
+# `ldap_user(options, callback)`
 
 Create and modify a user store inside an OpenLDAP server.   
 
@@ -35,8 +35,8 @@ require('mecano').ldap_user({
 
 ## Source Code
 
-    module.exports = (goptions, options, callback) ->
-      wrap arguments, (options, callback) ->
+    module.exports = (options, callback) ->
+      wrap @, arguments, (options, callback) ->
         modified = false
         return callback Error "Mecano `ldap_user`: required property 'user'" unless options.user
         options.user = [options.user] unless Array.isArray options.user

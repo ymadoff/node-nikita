@@ -1,5 +1,5 @@
 
-# `extract(options, [goptions], callback)`
+# `extract(options, callback)`
 
 Extract an archive. Multiple compression types are supported. Unless
 specified as an option, format is derived from the source extension. At the
@@ -47,8 +47,8 @@ require('mecano').extract({
 
 ## Source Code
 
-    module.exports = (goptions, options, callback) ->
-      wrap arguments, (options, callback) ->
+    module.exports = (options, callback) ->
+      wrap @, arguments, (options, callback) ->
         # Validate parameters
         return callback new Error "Missing source: #{options.source}" unless options.source
         destination = options.destination ? path.dirname options.source

@@ -1,5 +1,5 @@
 
-# `krb5_ktadd(options, [goptions], callback)`
+# `krb5_ktadd(options, callback)`
 
 Create and manage a keytab. This function is usually not used directly but instead
 called by the `krb5_addprinc` function.   
@@ -44,8 +44,8 @@ require('mecano').krb5_delrinc({
 
 ## Source Code
 
-    module.exports = (goptions, options, callback) ->
-      wrap arguments, (options, callback) ->
+    module.exports = (options, callback) ->
+      wrap @, arguments, (options, callback) ->
         return callback new Error 'Property principal is required' unless options.principal
         return callback new Error 'Property keytab is required' unless options.keytab
         if /^\S+@\S+$/.test options.kadmin_principal

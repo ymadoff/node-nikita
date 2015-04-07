@@ -1,5 +1,5 @@
 
-# `move(options, [goptions], callback)`
+# `move(options, callback)`
 
 Move files and directories. It is ok to overwrite the destination file if it
 exists, in which case the source file will no longer exists.
@@ -42,8 +42,8 @@ require('mecano').move({
 
 ## Source Code
 
-    module.exports = (goptions, options, callback) ->
-      wrap arguments, (options, callback) ->
+    module.exports = (options, callback) ->
+      wrap @, arguments, (options, callback) ->
         do_exists = ->
           options.log? "Mecano `move`: Stat destination"
           fs.stat options.ssh, options.destination, (err, stat) ->

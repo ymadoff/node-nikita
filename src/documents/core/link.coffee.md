@@ -1,8 +1,10 @@
 
-# `link(options, [goptions], callback)`
+# `link(options, callback)`
 
 Create a symbolic link and it's parent directories if they don't yet
 exist.
+
+Note, it is valid for the "source" file to not exist.
 
 ## Options
 
@@ -44,8 +46,8 @@ require('mecano').link({
 
 ## Source Code
 
-    module.exports = (goptions, options, callback) ->
-      wrap arguments, (options, callback) ->
+    module.exports = (options, callback) ->
+      wrap @, arguments, (options, callback) ->
         linked = 0
         sym_exists = (options, callback) ->
           fs.exists options.ssh, options.destination, (err, exists) ->

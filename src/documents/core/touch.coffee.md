@@ -1,5 +1,5 @@
 
-# `touch(options, [goptions], callback)`
+# `touch(options, callback)`
 
 Create a empty file if it does not yet exists.
 
@@ -36,8 +36,8 @@ require('mecano').touch({
 
 ## Source Code
 
-    module.exports = (goptions, options, callback) ->
-      wrap arguments, (options, callback) ->
+    module.exports = (options, callback) ->
+      wrap @, arguments, (options, callback) ->
         # Validate parameters
         {ssh, destination, mode} = options
         return callback new Error "Missing destination: #{destination}" unless destination

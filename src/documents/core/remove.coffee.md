@@ -1,5 +1,5 @@
 
-# `remove(options, [goptions], callback)`
+# `remove(options, callback)`
 
 Recursively remove files, directories and links.
 
@@ -58,8 +58,8 @@ require('mecano').remove([
 
 ## Source Code
 
-    module.exports = (goptions, options, callback) ->
-      wrap arguments, (options, callback) ->
+    module.exports = (options, callback) ->
+      wrap @, arguments, (options, callback) ->
         # Validate parameters
         options = source: options if typeof options is 'string'
         options.source ?= options.destination

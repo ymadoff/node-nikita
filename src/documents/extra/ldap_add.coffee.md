@@ -1,5 +1,5 @@
 
-# `ldap_add(options, [goptions], callback)`
+# `ldap_add(options, callback)`
 
 Insert or modify an entry inside an OpenLDAP server.   
 
@@ -40,8 +40,8 @@ require('mecano').ldap_index({
 
 ## Source Code
 
-    module.exports = ->
-      wrap arguments, (options, callback) ->
+    module.exports = (options, callback) ->
+      wrap @, arguments, (options, callback) ->
         modified = false
         return callback Error "Mecano `ldap_add`: required property 'entry'" unless options.entry
         options.entry = [options.entry] unless Array.isArray options.entry

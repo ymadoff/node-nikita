@@ -1,5 +1,5 @@
 
-# `execute(options, [goptions], callback)`
+# `execute(options, callback)`
 
 Run a command locally or with ssh if `host` or `ssh` is provided.   
 
@@ -82,11 +82,12 @@ mecano.execute({
 
 ## Source Code
 
-    module.exports = (goptions, options, callback) ->
-      callback = arguments[arguments.length-1]
-      callback = null unless typeof callback is 'function'
-      stds = if callback then callback.length > 2 else false
-      wrap arguments, (options, callback) ->
+    module.exports = (options, callback) ->
+      # callback = arguments[arguments.length-1]
+      # callback = null unless typeof callback is 'function'
+      # stds = if callback then callback.length > 2 else false
+      stds = callback.length > 2 or options.user_args
+      wrap @, arguments, (options, callback) ->
         # Validate parameters
         options = { cmd: options } if typeof options is 'string'
         return callback new Error "Missing cmd: #{options.cmd}" unless options.cmd?
@@ -97,33 +98,30 @@ mecano.execute({
         if options.trap_on_error
           options.cmd = "set -e\n#{options.cmd}"
         options.log? "Mecano `execute`: #{options.cmd}"
-        run = exec options
+        child = exec options
         stdout = []; stderr = []
-        if options.stdout
-          run.stdout.pipe options.stdout, end: false
+        child.stdout.pipe options.stdout, end: false if options.stdout
+        child.stderr.pipe options.stderr, end: false if options.stderr
         if stds
-          run.stdout.on 'data', (data) ->
+          child.stdout.on 'data', (data) ->
             if Array.isArray stdout # A string on exit
               stdout.push data
-            else console.log 'stdout coming'
-        if options.stderr
-          run.stderr.pipe options.stderr, end: false
-        if stds
-          run.stderr.on 'data', (data) ->
+            else console.log 'stdout coming after child exit'
+          child.stderr.on 'data', (data) ->
             if Array.isArray stderr # A string on exit
               stderr.push data
-            else console.log 'stderr coming'
-        run.on "exit", (code) ->
-          # Givent some time because the "exit" event is sometimes
+            else console.log 'stderr coming after child exit'
+        child.on "exit", (code) ->
+          # Give it some time because the "exit" event is sometimes
           # called before the "stdout" "data" event when runing
-          # `make test`
+          # `npm test`
           setTimeout ->
             stdout = if stds then stdout.join('') else undefined
             stderr = if stds then stderr.join('') else undefined
             if options.stdout
-              run.stdout.unpipe options.stdout
+              child.stdout.unpipe options.stdout
             if options.stderr
-              run.stderr.unpipe options.stderr
+              child.stderr.unpipe options.stderr
             if options.code.indexOf(code) is -1 and options.code_skipped.indexOf(code) is -1
               options.log? "Mecano `execute`: invalid exit code \"#{code}\""
               err = new Error "Invalid Exit Code: #{code}"
@@ -142,7 +140,6 @@ mecano.execute({
     exec = require 'ssh2-exec'
     misc = require './misc'
     wrap = require './misc/wrap'
-    child = require './misc/child'
 
 
 

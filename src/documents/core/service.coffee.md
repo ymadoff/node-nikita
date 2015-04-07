@@ -1,5 +1,5 @@
 
-# `service(options, [goptions], callback)` 
+# `service(options, callback)` 
 
 Install a service. For now, only yum over SSH.
 
@@ -17,7 +17,7 @@ Install a service. For now, only yum over SSH.
 *   `srv_name`   
     Name used by the service utility, default to "name".   
 *   `cache`   
-    Run entirely from system cache, run install and update checks offline.   
+    Run entirely from system cache to list installed and outdated packages.   
 *   `action`   
     Execute the service with the provided action argument.   
 *   `installed`   
@@ -69,8 +69,8 @@ require('mecano').service([{
 
 ## Source Code
 
-    module.exports = (goptions, options, callback) ->
-      wrap arguments, (options, callback) ->
+    module.exports = (options, callback) ->
+      wrap @, arguments, (options, callback) ->
         installed = updates = null
         # Validate parameters
         # return callback new Error 'Missing service name' unless options.name
@@ -82,19 +82,21 @@ require('mecano').service([{
         # if options.startup? and typeof options.startup isnt 'string'
         #     options.startup = if options.startup then '2345' else ''
         modified = false
-        installed ?= options.installed
-        updates ?= options.updates
+        if options.cache
+          options.db ?= {}
+          installed = options.db['mecano:execute:installed']
+          updates = options.db['mecano:execute:updates']
         options.action = options.action.split(',') if typeof options.action is 'string'
         # Start real work
-        do_chkinstalled = ->
+        do_installed = ->
           # option name and yum_name are optional, skill installation if not present
           return do_startuped() unless pkgname
           cache = ->
-            options.log? "Mecano `service: list installed"
+            options.log? "Mecano `service: list installed [DEBUG]"
             c = if options.cache then '-C' else ''
             execute
               ssh: options.ssh
-              cmd: "yum -C list installed"
+              cmd: "yum #{c} list installed"
               code_skipped: 1
               log: options.log
               # stdout: options.stdout
@@ -110,11 +112,11 @@ require('mecano').service([{
                 installed.push pkg[1] if pkg = /^([^\. ]+?)\./.exec pkg
               decide()
           decide = ->
-            if installed.indexOf(pkgname) isnt -1 then do_chkupdates() else do_install()
+            if installed.indexOf(pkgname) isnt -1 then do_updates() else do_install()
           if installed then decide() else cache()
-        do_chkupdates = ->
+        do_updates = ->
           cache = ->
-            options.log? "Mecano `service`: list available updates"
+            options.log? "Mecano `service`: list available updates [DEBUG]"
             c = if options.cache then '-C' else ''
             execute
               ssh: options.ssh
@@ -135,11 +137,11 @@ require('mecano').service([{
               decide()
           decide = ->
             if updates.indexOf(pkgname) isnt -1 then do_install() else
-              options.log? "Mecano `service`: No available update"
+              options.log? "Mecano `service`: No available update for '#{pkgname}' [INFO]"
               do_startuped()
           if updates then decide() else cache()
         do_install = ->
-          options.log? "Mecano `service`: install \"#{pkgname}\""
+          options.log? "Mecano `service`: install '#{pkgname}' [INFO]"
           execute
             ssh: options.ssh
             cmd: "yum install -y #{pkgname}"
@@ -155,12 +157,14 @@ require('mecano').service([{
               updatesIndex = updates.indexOf pkgname
               updates.splice updatesIndex, 1 unless updatesIndex is -1
             # Those 2 lines seems all wrong
-            return callback new Error "No package #{pkgname} available." unless succeed
+            unless succeed
+              options.log? "Mecano `service`: No package available for '#{pkgname}' [ERROR]"
+              return callback new Error "No package available for '#{pkgname}'."
             modified = true if installedIndex isnt -1
             do_startuped()
         do_startuped = ->
           return do_started() unless options.startup?
-          options.log? "Mecano `service`: list startup services"
+          options.log? "Mecano `service`: list startup services [DEBUG]"
           execute
             ssh: options.ssh
             cmd: "chkconfig --list #{chkname}"
@@ -171,13 +175,16 @@ require('mecano').service([{
           , (err, registered, stdout, stderr) ->
             return callback err if err
             # Invalid service name return code is 0 and message in stderr start by error
-            return callback new Error "Invalid chkconfig name #{chkname}" if /^error/.test stderr
+            if /^error/.test stderr
+              options.log? "Mecano `service`: Invalid chkconfig name for `#{chkname}` [ERROR]"
+              return callback new Error "Invalid chkconfig name for `#{chkname}`"
             current_startup = ''
             if registered
               for c in stdout.split(' ').pop().trim().split '\t'
                 [level, status] = c.split ':'
                 current_startup += level if ['on', 'marche'].indexOf(status) > -1
             return do_started() if (options.startup is true and current_startup.length) or (options.startup is current_startup)
+            return do_started() if registered and options.startup is false and current_startup is ''
             modified = true
             if options.startup
             then startup_add()
@@ -220,8 +227,6 @@ require('mecano').service([{
             do_started()
         do_started = ->
           return do_finish() unless options.action
-          # return do_action() if ['start', 'stop'].indexOf(options.action) is -1
-          # return do_action() if ['restart'].indexOf(options.action) isnt -1
           options.log? "Mecano `service`: check if started"
           execute
             ssh: options.ssh
@@ -233,18 +238,17 @@ require('mecano').service([{
           , (err, started) ->
             return callback err if err
             if started
-              # return do_action() unless options.action is 'start'
-              return do_action() if 'stop' in options.action or 'restart' in options.action
+              return do_action 'stop' if 'stop' in options.action
+              return do_action 'restart' if 'restart' in options.action
             else
-              # return do_action() unless options.action is 'stop'
-              return do_action() if 'start' in options.action
+              return do_action 'start' if 'start' in options.action
             do_finish()
-        do_action = ->
+        do_action = (action) ->
           return do_finish() unless options.action
-          options.log? "Mecano `service`: #{options.action} service"
+          options.log? "Mecano `service`: #{action} service"
           execute
             ssh: options.ssh
-            cmd: "service #{srvname} #{options.action}"
+            cmd: "service #{srvname} #{action}"
             log: options.log
             stdout: options.stdout
             stderr: options.stderr
@@ -253,8 +257,11 @@ require('mecano').service([{
             modified = true
             do_finish()
         do_finish = ->
+          if options.cache
+            options.db['mecano:execute:installed'] = installed
+            options.db['mecano:execute:updates'] = updates
           callback null, modified
-        do_chkinstalled()
+        do_installed()
 
 ## Dependencies
 

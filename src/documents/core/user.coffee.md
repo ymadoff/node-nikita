@@ -1,5 +1,5 @@
 
-# `user(options, [goptions], callback)`
+# `user(options, callback)`
 
 Create or modify a Unix user.
 
@@ -74,10 +74,17 @@ you are a member of the "wheel" group (gid of "10") with the command
 `id a\_user` producing an output similar to 
 "uid=490(hive) gid=10(wheel) groups=10(wheel)".
 
+To list all files owner by a user or a uid, run:
+
+```bash
+find /var/tmp -user `whoami`
+find /var/tmp -uid 1000
+```
+
 ## Source Code
 
-    module.exports = (goptions, options, callback) ->
-      wrap arguments, (options, callback) ->
+    module.exports = (options, callback) ->
+      wrap @, arguments, (options, callback) ->
         return callback new Error "Option 'name' is required" unless options.name
         options.shell = "/sbin/nologin" if options.shell is false
         options.shell = "/bin/bash" if options.shell is true

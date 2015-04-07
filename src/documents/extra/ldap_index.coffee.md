@@ -1,5 +1,5 @@
 
-# `ldap_index(options, [goptions], callback)`
+# `ldap_index(options, callback)`
 
 Create new [index](index) for the OpenLDAP server.   
 
@@ -38,8 +38,8 @@ require('mecano').ldap_index({
 
 ## Source Code
 
-    module.exports = (goptions, options, callback) ->
-      wrap arguments, (options, callback) ->
+    module.exports = (options, callback) ->
+      wrap @, arguments, (options, callback) ->
         modified = false
         do_getdn = ->
           return do_get_indexes() if options.hdb_dn

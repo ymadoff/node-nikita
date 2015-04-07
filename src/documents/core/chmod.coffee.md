@@ -1,5 +1,5 @@
 
-# `chmod(options, [goptions], callback)`
+# `chmod(options, callback)`
 
 Change the permissions of a file or directory.
 
@@ -14,6 +14,9 @@ Change the permissions of a file or directory.
 *   `ssh` (object|ssh2)   
     Run the action on a remote server using SSH, an ssh2 instance or an
     configuration object used to initialize the SSH connection.   
+*   `stat` (Stat instance, optional)   
+    Pass the Stat object relative to the destination file or directory, to be
+    used as an optimization.   
 
 ## Callback parameters
 
@@ -35,18 +38,26 @@ require('mecano').chmod({
 
 ## Source Code
 
-    module.exports = (goptions, options, callback) ->
-      wrap arguments, (options, callback) ->
+    module.exports = (options, callback) ->
+      wrap @, arguments, (options, callback) ->
         # Validate parameters
-        {ssh, mode} = options
-        return callback new Error "Missing destination: #{options.destination}" unless options.destination
-        options.log? "Mecano `chmod`: stat \"#{options.destination}\""
-        fs.stat ssh, options.destination, (err, stat) ->
-          return callback err if err
-          return callback() if misc.mode.compare stat.mode, mode
-          options.log? "Mecano `chmod`: change mode form #{stat.mode} to #{mode}"
-          fs.chmod ssh, options.destination, mode, (err) ->
+        return callback Error "Missing destination: #{JSON.stringify options.destination}" unless options.destination
+        return callback Error "Missing option 'mode'" unless options.mode
+        # options.log? "Mecano `chmod` [DEBUG]"
+        do_stat = ->
+          return do_compare options.stat if options.stat
+          options.log? "Mecano `chmod`: stat \"#{options.destination}\" [DEBUG]"
+          fs.stat options.ssh, options.destination, (err, stat) ->
+            return callback err if err
+            do_compare stat
+        do_compare = (stat) ->
+          return callback() if misc.mode.compare stat.mode, options.mode
+          options.log? "Mecano `chmod`: change mode from #{stat.mode} to #{options.mode} [INFO]"
+          do_chmod()
+        do_chmod = ->
+          fs.chmod options.ssh, options.destination, options.mode, (err) ->
             callback err, true
+        do_stat()
 
 ## Dependencies
 

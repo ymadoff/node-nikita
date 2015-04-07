@@ -1,5 +1,5 @@
 
-# `render(options, [goptions], callback)`
+# `render(options, callback)`
 
 Render a template file. The following templating engines are
 integrated. More are added on demand.      
@@ -67,8 +67,8 @@ require('mecano').render({
 
 ## Source Code
 
-    module.exports = (goptions, options, callback) ->
-      wrap arguments, (options, callback) ->
+    module.exports = (options, callback) ->
+      wrap @, arguments, (options, callback) ->
         # Validate parameters
         return callback new Error 'Missing source or content' unless options.source or options.content
         return callback new Error 'Missing destination' unless options.destination

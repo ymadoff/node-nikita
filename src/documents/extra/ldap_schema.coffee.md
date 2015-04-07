@@ -1,5 +1,5 @@
 
-# `ldap_schema(options, [goptions], callback)`
+# `ldap_schema(options, callback)`
 
 Register a new ldap schema.
 
@@ -45,8 +45,8 @@ require('mecano').ldap_schema({
 
 ## Source Code
 
-    module.exports = (goptions, options, callback) ->
-      wrap arguments, (options, callback) ->
+    module.exports = (options, callback) ->
+      wrap @, arguments, (options, callback) ->
         return callback new Error "Missing name" unless options.name
         return callback new Error "Missing schema" unless options.schema
         options.schema = options.schema.trim()
@@ -95,6 +95,7 @@ require('mecano').ldap_schema({
               content: "include #{schema}"
               destination: conf
               ssh: options.ssh
+              log: options.log
             , (err) ->
               return callback err if err
               do_generate()
@@ -116,6 +117,7 @@ require('mecano').ldap_schema({
             destination: "#{ldif}/cn=config/cn=schema/cn=#{options.name}.ldif"
             force: true
             ssh: options.ssh
+            log: options.log
           , (err, moved) ->
             return callback err if err
             return new Error 'No generated schema' unless moved
@@ -153,6 +155,7 @@ require('mecano').ldap_schema({
               replace: ''
             ]
             ssh: options.ssh
+            log: options.log
           , (err, written) ->
             return callback err if err
             do_register()

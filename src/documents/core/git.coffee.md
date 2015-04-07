@@ -1,5 +1,5 @@
 
-# `git(options, [goptions], callback)`
+# `git(options, callback)`
 
 Create and synchronize a git repository.
 
@@ -44,8 +44,8 @@ require('mecano').extract({
 
 ## Source Code
 
-    module.exports = (goptions, options, callback) ->
-      wrap arguments, (options, callback) ->
+    module.exports = (options, callback) ->
+      wrap @, arguments, (options, callback) ->
         # Sanitize parameters
         options.revision ?= 'HEAD'
         rev = null
@@ -113,7 +113,6 @@ require('mecano').extract({
     each = require 'each'
     misc = require './misc'
     wrap = require './misc/wrap'
-    child = require './misc/child'
     execute = require './execute'
 
 

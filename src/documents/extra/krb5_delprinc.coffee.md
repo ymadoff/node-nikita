@@ -1,5 +1,5 @@
 
-# `krb5_delprinc(options, [goptions], callback)`
+# `krb5_delprinc(options, callback)`
 
 Remove a Kerberos principal and optionally its keytab.   
 
@@ -43,8 +43,8 @@ require('mecano').krb5_delrinc({
 
 ## Source Code
 
-    module.exports = (goptions, options, callback) ->
-      wrap arguments, (options, callback) ->
+    module.exports = (options, callback) ->
+      wrap @, arguments, (options, callback) ->
         return callback new Error 'Property principal is required' unless options.principal
         modified = false
         do_delprinc = ->
