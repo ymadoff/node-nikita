@@ -5,8 +5,8 @@ title: 'Usages'
 
 # Usage
 
-Mecano functions can be used indepently or chained using a promise API. Here's
-how to use promise:
+Mecano functions can be chained using a promise-style API. Here's
+how to use it:
 
 ```js
 mecano(options)
