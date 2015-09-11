@@ -1,32 +1,18 @@
 {
-  "name": "twitter-bootstrap.docpad",
-  "version": "0.9.0",
-  "description": "Twitter Bootstrap skeleton for DocPad. Simple and flexible HTML, CSS, and Javascript for popular user interface components and interactions.",
-  "homepage": "https://github.com/bevry/twitter-bootstrap.docpad",
-  "keywords": [
-    "docpad-skeleton",
-    "docpad",
-    "website",
-    "bootstrap",
-    "twitter bootstrap"
-  ],
-  "author": "Bevry Pty Ltd <us@bevry.me> (http://bevry.me)",
-  "maintainers": [
-    "Benjamin Lupton <b@lupton.cc> (http://balupton.com)"
-  ],
-  "contributors": [
-    "Benjamin Lupton <b@lupton.cc> (http://balupton.com)"
-  ],
-  "bugs": {
-    "url": "https://github.com/docpad/twitter-bootstrap.docpad/issues"
-  },
+  "name": "mecano-docs",
+  "description": "Common functions for system deployment.",
+  "keywords": ["deploy", "masson", "build", "ssh", "system", "install", "fs", "task", "cli"],
+  "version": "0.0.0",
+  "homepage": "http://www.adaltas.com/projects/node-mecano/",
+  "author": "David Worms <david@adaltas.com>",
+  "license": "BSD-3-Clause",
   "repository": {
     "type": "git",
-    "url": "http://github.com/docpad/twitter-bootstrap.docpad.git"
+    "url": "https://github.com/wdavidw/node-mecano"
   },
-  "engines": {
-    "node": "0.10.x",
-    "npm": "1.4.x"
+  "bugs": {
+    "email": "open@adaltas.com",
+    "url": "http://github.com/wdavidw/node-mecano/issues"
   },
   "dependencies": {
     "bower": "~1",
