@@ -78,5 +78,20 @@ mecano.write({
 })
 ```
 
+## Debug
+ 
+The "debug" option is an alias to setting the options "log", "stdout" and
+"stderr". For exemple, the following two calls are the same:
 
+```javascript
+mecano.call
+  debug: true
+  handler: function(){}
+mecano.call
+  log: console.log
+  stdout: process.stdout
+  stderr: process.stderr
+  handler: function(){}
+```
 
+[ssh2]: https://github.com/mscdex/ssh2

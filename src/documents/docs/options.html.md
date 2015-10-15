@@ -1,5 +1,5 @@
 
-## Options
+# Options
 
 Some options are globally available to every modules. Such options may be
 provided per function call or setup globally when constructing the mecano
@@ -15,5 +15,8 @@ instance.
     A configuration object or an instance of the [ssh2 package][ssh2].
 *   `shy` (boolean)   
     Avoid modified the process status.   
-
-[ssh2]: https://github.com/mscdex/ssh2
+*   `debug` (boolean)   
+    Report detail information directly to stdout and stderr.   
+    
+The [reporting](./reporting) page covers the "log", "stdout", "stderr" and
+"debug" options in more details.   
