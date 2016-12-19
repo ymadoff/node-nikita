@@ -1,5 +1,8 @@
 .container {
   min-height: 100vh;
-  display: flex;
+  /*display: flex;
   flex-direction: column;
+  */
+  position: relative;
+  padding-left: 200px;
 }

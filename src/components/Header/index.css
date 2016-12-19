@@ -2,6 +2,36 @@
   --nav-item-padding: 0.5rem;
 }
 
+.appBar {
+  justify-content: space-between;
+}
+
+.title {
+  color: #000000;
+  display: inline-block;
+  font-size: 2rem;
+  /*line-height: 4rem;*/
+}
+
+.headline {
+  color: #000000;
+  margin-left: 1rem;
+  /*display: inline-block;
+  line-height: 4rem;*/
+}
+
+.nav {
+  /*float: right;
+  position: relative;*/
+  text-align: right;
+  /*flex-grow: 10;*/
+}
+
+.github svg{
+  height: 1.3rem;
+}
+
+/*
 .header {
   color: var(--mainColorContrasted);
   background: var(--mainColor);
@@ -38,4 +68,4 @@
   width: 1.5rem;
   height: 1.5rem;
   vertical-align: middle;
-}
+}*/

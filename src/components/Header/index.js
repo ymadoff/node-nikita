@@ -1,66 +1,65 @@
 import React, { PropTypes } from "react"
-import { Link } from "react-router"
 
 import enhanceCollection from "phenomic/lib/enhance-collection"
 import styles from "./index.css"
 import Svg from "react-svg-inline"
-import twitterSvg from "../icons/iconmonstr-twitter-1.svg"
-import gitHubSvg from "../icons/iconmonstr-github-1.svg"
+import AppBar from "react-toolbox/lib/app_bar"
+import Navigation from "react-toolbox/lib/navigation"
+import Link from "react-toolbox/lib/link"
 
-const Header = (props, { metadata: { pkg }, collection }) => {
-  const pages = enhanceCollection(collection, {
-    filter: { layout: "Page" },
-  })
-  return (
-    <header className={ styles.header }>
-      <nav className={ styles.nav }>
-        <div className={ styles.navPart1 }>
-          <Link
-            className={ styles.link }
-            to="/"
-          >
-            { "Home" }
-          </Link>
-          { 
-            pages.map((page) => (
-              <Link
-                key={ page.title }
-                className={ styles.link }
-                to={ page.__url }
-              >
-                { page.title }
-              </Link>
-            ))
+import gitHubSvg from "../icons/iconmonstr-github-1.svg"
+const git = <Svg className={ "material-icons" } svg={ gitHubSvg } cleanup />
+
+class Header extends React.Component {
+  static propTypes = {
+    onLeftIconClick: PropTypes.func
+  };
+  render() {
+    const { onLeftIconClick } = this.props;
+    const { router, metadata: { pkg }, collection } = this.context;
+    const pages = enhanceCollection(collection, {
+      filter: { layout: "Page" },
+    })
+    return (
+      <AppBar leftIcon="menu" onLeftIconClick={ onLeftIconClick } className={ styles.appBar }>
+        <p>
+          <span className={ styles.title }>{ "NIKITA" }</span>
+          <span className={ styles.headline }>
+            { "deployment automatisation for Node.js" }
+          </span>
+        </p>
+        <Navigation className={ styles.nav } type="horizontal" flat="true">
+          {
+            pages.map((page) => {
+              const handleToggle = (event) => {
+                event.preventDefault()
+                router.push(page.__url)
+              }
+              return (
+                <Link
+                  key={ page.title }
+                  className={ styles.link }
+                  href={ page.__url }
+                  onClick={ handleToggle }
+                >
+                  { page.title }
+                </Link>
+              )
+            })
           }
-        </div>
-        <div className={ styles.navPart2 }>
-          { pkg.twitter &&
-            <a
-              href={ `https://twitter.com/${pkg.twitter}` }
-              className={ styles.link }
-            >
-              <Svg svg={ twitterSvg } cleanup />
-                { "Twitter" }
-            </a>
-          }
-          { pkg.repository &&
-            <a
-              href={ pkg.repository }
-              className={ styles.link }
-            >
-              <Svg svg={ gitHubSvg } cleanup />
-              { "GitHub" }
-            </a>
-          }
-        </div>
-      </nav>
-    </header>
-  )
+          <Link href={ pkg.repository } label="GitHub"
+            active icon={ git } className={ styles.github }
+          />
+        </Navigation>
+      </AppBar>
+    )
+  }
 }
 
 Header.contextTypes = {
   metadata: PropTypes.object.isRequired,
   collection: PropTypes.array,
+  router: PropTypes.object,
 }
 
 export default Header

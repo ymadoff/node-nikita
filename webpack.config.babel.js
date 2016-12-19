@@ -10,7 +10,7 @@ import pkg from "./package.json"
 
 export default (config = {}) => {
   const postcssPlugins = () => [
-    require("stylelint")(),
+    // require("stylelint")(),
     require("postcss-cssnext")({
       browsers: "last 2 versions",
       features: {
@@ -31,6 +31,10 @@ export default (config = {}) => {
   return {
     ...config.dev && {
       devtool: "#cheap-module-eval-source-map",
+    },
+    sassLoader: {
+      data: '@import "src/layouts/theme.scss";'
+      // includePaths: [path.resolve(__dirname, './src/app')]
     },
     module: {
       noParse: /\.min\.js/,
@@ -121,6 +125,43 @@ export default (config = {}) => {
             ],
           }),
           */
+        },
+        // {
+        //   test: /\.css$/,
+        //   include: path.resolve(__dirname, "node_modules"),
+        //   // webpack 1
+        //   loader: ExtractTextPlugin.extract(
+        //     "style-loader",
+        //     [ 'css-loader', "postcss-loader" ].join("!"),
+        //   )
+        // },
+        // {
+        //   test: /(\.scss|\.css)$/,
+        //   loader: ExtractTextPlugin.extract(
+        //     'style',
+        //     'css?sourceMap&modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]!postcss!sass')
+        // },
+        {
+          test: /\.styl$/,
+          loader: ExtractTextPlugin.extract(
+            "style-loader",
+            [ "css-loader?sourceMap&modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]", "postcss-loader", 'stylus-loader' ].join("!"),
+            // {
+            //   loader: "sass-loader"
+            //   // data: '@import "' + path.resolve(__dirname, 'node_modules/react-toolbox/theme/_theme.scss') + '";'
+            // }
+          )
+        },
+        {
+          test: /\.scss$/,
+          loader: ExtractTextPlugin.extract(
+            "style-loader",
+            [ "css-loader?sourceMap&modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]", "postcss-loader", 'sass-loader' ].join("!"),
+            // {
+            //   loader: "sass-loader"
+            //   // data: '@import "' + path.resolve(__dirname, 'node_modules/react-toolbox/theme/_theme.scss') + '";'
+            // }
+          )
         },
         // *.global.css => global (normal) css
         {
