@@ -17,7 +17,6 @@ const PageLoading = () => (
     <Helmet
       title={ "Loading..." }
     />
-    { "fuck" }
     <TopBarProgressIndicator />
     <div className={ styles.loader }>
       <div className={ styles.spinner }></div>

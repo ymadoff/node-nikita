@@ -8,28 +8,3 @@
 .heading {
   color: #0e63e3;
 }
-.page {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  overflow: scroll;
-  // justify-content: space-around;
-  // align-items: stretch;
-  // flex-direction: column;
-}
-.layout {
-  overflow: scroll;
-  height: auto !important;
-}
-.navigation {
-  overflow: scroll !important;
-  aside {
-    overflow: scroll !important;
-  }
-}
-.panel {
-  overflow: scroll !important;
-}
-// .sidebar {
-//   overflow: scroll;
-// }

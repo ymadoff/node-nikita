@@ -8,6 +8,7 @@ import Page from "./layouts/Page"
 import PageError from "./layouts/PageError"
 import PageLoading from "./layouts/PageLoading"
 import Homepage from "./layouts/Homepage"
+import Section from "./layouts/Section"
 import Post from "./layouts/Post"
 
 const PageContainer = (props) => (
@@ -18,6 +19,7 @@ const PageContainer = (props) => (
       PageError,
       PageLoading,
       Homepage,
+      Section,
       Post,
     } }
   />

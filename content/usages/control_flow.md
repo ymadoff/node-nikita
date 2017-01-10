@@ -1,6 +1,7 @@
 ---
-title: 5 minutes tutorial
+title: Control Flow
 layout: Page
+sort: 7
 ---
 
 Tutorial start now

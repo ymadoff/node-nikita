@@ -36,6 +36,39 @@ export default (config = {}) => {
       data: '@import "src/layouts/theme.scss";'
       // includePaths: [path.resolve(__dirname, './src/app')]
     },
+    phenomic: {
+      plugins: [
+        ...require("phenomic/lib/loader-preset-default").default,
+        ({ frontMatter, result, options }) => {
+          let title = null
+          frontMatter.content = frontMatter.content.replace(/\n*# .*\n/, (match) => {
+            if (title) return match;
+            title = match.replace(/\n*# (.*)\n*/, '$1');
+            return '\n';
+          })
+          result.head.title = title || frontMatter.data.title
+          return result;
+        },
+        ...require("phenomic/lib/loader-preset-markdown").default
+        // ({ frontMatter, result, options }) => {
+        //   // console.log('frontMatter', frontMatter);
+        //   // console.log('result', result);
+        //   // console.log('options', options);
+        //   let title = null
+        //   frontMatter.content.replace(/\n*# .*\n/, (match) => {
+        //     console.log('******** found match', match);
+        //     if (title) return match;
+        //     title = match.replace(/\n*# (.*)\n*/, '$1');
+        //     console.log('******** title is', title);
+        //     return '\n';
+        //   })
+        //   return {
+        //     ...result,
+        //     title: title || frontMatter.data.title,
+        //   }
+        // }
+      ]
+    },
     module: {
       noParse: /\.min\.js/,
       // webpack 1

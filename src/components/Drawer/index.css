@@ -1,0 +1,91 @@
+
+.drawer {
+  background: #d1d1d1;
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  overflow: auto;
+}
+.drawer > div {
+  padding-bottom: 2rem;
+}
+.drawer ul{
+  	list-style: none;
+  	margin: 0;
+  	padding: 0;
+}
+.drawer nav {
+}
+.drawer  > * {
+  opacity: 0;
+}
+@media screen and (max-width: 760px) {
+  .drawer {
+    width: 80vw;
+  }
+  .open {
+    left: 0;
+    transition: left 300ms ease;
+  }
+  .open > * {
+    opacity: 1;
+    transition: opacity 100ms ease 300ms;
+  }
+  .close {
+    left: -80vw;
+    transition: left 300ms ease;
+  }
+  .close > * {
+    opacity: 0;
+    transition: opacity 200ms;
+  }
+}
+@media screen and (min-width: 760px) {
+  .drawer {
+    width: 300px;
+  }
+  .open {
+    left: 0;
+    transition: left 300ms ease;
+  }
+  .open > * {
+    opacity: 1;
+    transition: opacity 100ms ease 300ms;
+  }
+  .close {
+    left: -300px;
+    transition: left 300ms ease;
+  }
+  .close > * {
+    opacity: 0;
+    transition: opacity 200ms;
+  }
+}
+.section {
+  padding-left: 1.5rem;
+  opacity: .4;
+  margin-bottom: 0;
+}
+.link {
+  padding-left: 1.5rem;
+  position: relative;
+}
+.link a {
+  opacity: .6;
+  color: #000;
+}
+
+.active {
+  border-left: .5rem solid #bc1b00;
+  padding-left: 1rem;
+}
+.link a:hover {
+  opacity: 1;
+}
+.active a {
+  opacity: 1;
+  color: #bc1b00;
+}

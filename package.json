@@ -4,6 +4,9 @@
   "homepage": "http://nikita.io",
   "twitter": "",
   "repository": "https://github.com/adaltas/nikita.git",
+  "bugs": {
+    "url": "http://github.com/adaltas/nikita/issues"
+  },
   "scripts": {
     "lint:js": "eslint --ignore-path .gitignore --fix .",
     "lint:css": "stylelint \"src/**/*.css\"",
@@ -128,6 +131,7 @@
     "stylus-loader": "^2.3.1"
   },
   "dependencies": {
-    "react-addons-css-transition-group": "^15.4.1"
+    "react-addons-css-transition-group": "^15.4.1",
+    "react-cookie": "^1.0.4"
   }
 }

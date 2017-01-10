@@ -3,12 +3,9 @@ import Helmet from "react-helmet"
 import invariant from "invariant"
 import { BodyContainer, joinUri } from "phenomic"
 
-
 import styles from "./index.scss"
 import {} from "material-icons/src/stylus/material-icons.styl"
 import {} from "../theme.scss"
-
-import {Layout, NavDrawer, IconButton, Panel, Sidebar, AppBar, Checkbox, Button} from "react-toolbox"
 
 class Page extends React.Component {
   state = {
@@ -17,7 +14,7 @@ class Page extends React.Component {
     sidebarPinned: false,
   };
   render() {
-    const { __filename, __url, head, body, header, footer, children } = this.props
+    const { __filename, head, body, header, footer, children } = this.props
     const { metadata: { pkg } } = this.context
     invariant (
       typeof head.title === "string",
@@ -29,7 +26,7 @@ class Page extends React.Component {
       { property: "og:title", content: metaTitle },
       {
         property: "og:url",
-        content: joinUri(process.env.PHENOMIC_USER_URL, '/'),
+        content: joinUri(process.env.PHENOMIC_USER_URL, "/"),
       },
       { property: "og:description", content: head.description },
       { name: "twitter:card", content: "summary" },
@@ -37,6 +34,10 @@ class Page extends React.Component {
       { name: "twitter:creator", content: `@${ pkg.twitter }` },
       { name: "twitter:description", content: head.description },
       { name: "description", content: head.description },
+      { name: "viewport", content:
+          "width=device-width; height=device-height; initial-scale=1.0; "+
+          "minimum-scale=1.0; maximum-scale=1.0; user-scalable=no",
+      },
     ]
     const link = [
       "https://fonts.googleapis.com/icon?family=Material+Icons",
@@ -49,18 +50,16 @@ class Page extends React.Component {
           meta={ meta }
           link={ link }
         />
-        <Layout style={ styles.layout }>
-          <Panel className={ styles.panel }>
-            {
-              head.title &&
-              <h1 className={ styles.heading }>{ head.title }</h1>
-            }
-            { header }
-            <BodyContainer>{ body }</BodyContainer>
-            { children }
-            { footer }
-          </Panel>
-        </Layout>
+        <div style={ styles.layout }>
+          {
+            head.title &&
+            <h1 className={ styles.heading }>{ head.title }</h1>
+          }
+          { header }
+          <BodyContainer>{ body }</BodyContainer>
+          { children }
+          { footer }
+        </div>
       </div>
     )
   }
