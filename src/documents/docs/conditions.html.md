@@ -197,16 +197,16 @@ were executed with failure otherwise the callback `skip` is called.
 
 Work on the property `if_exists` in `options`. The value may 
 be a file path or an array of file paths. You could also set the
-value to `true`, in which case it will be set with the `destination`
+value to `true`, in which case it will be set with the `target`
 option.
 
 The callback `succeed` is called if all the provided paths 
 exists otherwise the callback `skip` is called.
 
       if_exists: (options, skip, succeed) ->
-        {ssh, if_exists, destination} = options
-        if typeof not_if_exists is 'boolean' and destination
-          if_exists = if if_exists then [destination] else null
+        {ssh, if_exists, target} = options
+        if typeof not_if_exists is 'boolean' and target
+          if_exists = if if_exists then [target] else null
         return succeed() unless if_exists?
         each(if_exists)
         .on 'item', (if_exists, next) ->
@@ -219,16 +219,16 @@ exists otherwise the callback `skip` is called.
 
 Work on the property `not_if_exists` in `options`. The value may 
 be a file path or an array of file paths. You could also set the
-value to `true`, in which case it will be set with the `destination`
+value to `true`, in which case it will be set with the `target`
 option.
 
 The callback `succeed` is called if none of the provided paths 
 exists otherwise the callback `skip` is called.
 
       not_if_exists: (options, skip, succeed) ->
-        {ssh, not_if_exists, destination} = options
-        if typeof not_if_exists is 'boolean' and destination
-          not_if_exists = if not_if_exists then [destination] else null
+        {ssh, not_if_exists, target} = options
+        if typeof not_if_exists is 'boolean' and target
+          not_if_exists = if not_if_exists then [target] else null
         return succeed() unless not_if_exists?
         each(not_if_exists)
         .on 'item', (not_if_exists, next) ->

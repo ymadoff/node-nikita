@@ -6,14 +6,14 @@ Write a file or a portion of an existing file.
 ## Options
 
 *   `append`   
-    Append the content to the destination file. If destination does not exist,
+    Append the content to the target file. If target does not exist,
     the file will be created.   
 *   `backup`   
     Create a backup, append a provided string to the filename extension or a
     timestamp if value is not a string.   
 *   `content`   
     Text to be written, an alternative to source which reference a file.   
-*   `destination`   
+*   `target`   
     File path where to write content to.   
 *   `diff` (boolean | function)   
     Print diff information, pass the result of [jsdiff.diffLines][diffLines] as
@@ -97,7 +97,7 @@ require('mecano').write({
   from: '# from\n',
   to: '# to',
   replace: 'my friend\n',
-  destination: scratch+'/a_file'
+  target: scratch+'/a_file'
 }, function(err, written){
   // '# here we are\n# from\nmy friend\n# to\nyou coquin'
 })
@@ -110,7 +110,7 @@ require('mecano').write({
   content: 'email=david(at)adaltas(dot)com\nusername=root',
   match: /(username)=(.*)/,
   replace: '$1=david (was $2)',
-  destination: scratch+'/a_file'
+  target: scratch+'/a_file'
 }, function(err, written){
   // '# email=david(at)adaltas(dot)com\nusername=david (was root)'
 })
@@ -123,7 +123,7 @@ require('mecano').write({
   content: 'here we are\nlets try to replace that one\nyou coquin',
   match: /(.*try) (.*)/,
   replace: ['my friend, $1'],
-  destination: scratch+'/a_file'
+  target: scratch+'/a_file'
 }, function(err, written){
   // '# here we are\nmy friend, lets try\nyou coquin'
 })
@@ -136,7 +136,7 @@ require('mecano').write({
   content: '#A config file\n#property=30\nproperty=10\n#End of Config',
   match: /^property=.*$/mg,
   replace: 'property=50',
-  destination: scratch+'/a_file'
+  target: scratch+'/a_file'
 }, function(err, written){
   // '# A config file\n#property=30\nproperty=50\n#End of Config'
 })
@@ -149,7 +149,7 @@ require('mecano').write({
   content: '#A config file\n#property=30\nproperty=10\n#End of Config',
   match: /^.*comment.*$/mg,
   replace: '# comment',
-  destination: scratch+'/a_file',
+  target: scratch+'/a_file',
   append: 'property'
 }, function(err, written){
   // '# A config file\n#property=30\n# comment\nproperty=50\n# comment\n#End of Config'
@@ -166,7 +166,7 @@ require('mecano').write({
     {match: /^email.*$/mg, replace: ''},  
     {match: /^(friends).*$/mg, replace: '$1: me'}
   ],
-  destination: scratch+'/a_file'
+  target: scratch+'/a_file'
 }, function(err, written){
   // 'username: you\n\nfriends: me'
 })
@@ -180,7 +180,7 @@ require('mecano').write({
         # Validate parameters
         return callback new Error 'Missing source or content' unless (options.source or options.content?) or options.replace or options.write?.length
         return callback new Error 'Define either source or content' if options.source and options.content
-        return callback new Error 'Missing destination' unless options.destination
+        return callback new Error 'Missing target' unless options.target
         options.content = options.content.toString() if options.content and Buffer.isBuffer options.content
         options.diff ?= options.diff or !!options.stdout
         options.engine ?= 'eco'
@@ -193,8 +193,8 @@ require('mecano').write({
             options.eof = "\r\n"
           when 'unicode'
             options.eof = "\u2028"
-        destination  = null
-        destinationHash = null
+        target  = null
+        targetHash = null
         content = null
         from = to = between = null
         append = options.append
@@ -216,10 +216,10 @@ require('mecano').write({
           if options.content?
             content = options.content
             content = "#{content}" if typeof content is 'number'
-            return do_read_destination()
+            return do_read_target()
           # Option "local_source" force to bypass the ssh
           # connection, use by the upload function
-          source = options.source or options.destination
+          source = options.source or options.target
           options.log? "Mecano `write`: force local source is \"#{if options.local_source then 'true' else 'false'}\" [DEBUG]"
           options.log? "Mecano `write`: source is \"#{options.source}\" [DEBUG]"
           ssh = if options.local_source then null else options.ssh
@@ -228,53 +228,53 @@ require('mecano').write({
             unless exists
               return callback new Error "Source does not exist: #{JSON.stringify options.source}" if options.source
               content = ''
-              return do_read_destination()
+              return do_read_target()
             options.log? "Mecano `write`: read source [DEBUG]"
             fs.readFile ssh, source, 'utf8', (err, src) ->
               return callback err if err
               content = src
-              do_read_destination()
-        destinationStat = null
-        do_read_destination = ->
-          # no need to test changes if destination is a callback
-          return do_render() if typeof options.destination is 'function'
-          options.log? "Mecano `write`: destination is \"#{options.destination}\" [DEBUG]"
+              do_read_target()
+        targetStat = null
+        do_read_target = ->
+          # no need to test changes if target is a callback
+          return do_render() if typeof options.target is 'function'
+          options.log? "Mecano `write`: target is \"#{options.target}\" [DEBUG]"
           exists = ->
-            options.log? "Mecano `write`: stat destination [DEBUG]"
-            fs.stat options.ssh, options.destination, (err, stat) ->
+            options.log? "Mecano `write`: stat target [DEBUG]"
+            fs.stat options.ssh, options.target, (err, stat) ->
               return do_mkdir() if err?.code is 'ENOENT'
               return callback err if err
-              destinationStat = stat
+              targetStat = stat
               if stat.isDirectory()
-                options.destination = "#{options.destination}/#{path.basename options.source}"
+                options.target = "#{options.target}/#{path.basename options.source}"
                 # Destination is the parent directory, let's see if the file exist inside
-                fs.stat options.ssh, options.destination, (err, stat) ->
+                fs.stat options.ssh, options.target, (err, stat) ->
                   # File doesnt exist
                   return do_render() if err?.code is 'ENOENT'
                   return callback err if err
-                  return callback new Error "Destination is not a file: #{options.destination}" unless stat.isFile()
-                  destinationStat = stat
+                  return callback new Error "Destination is not a file: #{options.target}" unless stat.isFile()
+                  targetStat = stat
                   do_read()
               else
                 do_read()
           do_mkdir = ->
             mkdir
               ssh: options.ssh
-              destination: path.dirname options.destination
+              target: path.dirname options.target
               uid: options.uid
               gid: options.gid
               mode: options.mode
               # Modify uid and gid if the dir does not yet exists
-              not_if_exists: path.dirname options.destination
+              not_if_exists: path.dirname options.target
             , (err, created) ->
               return callback err if err
               do_render()
           do_read = ->
-            options.log? "Mecano `write`: read destination [DEBUG]"
-            fs.readFile options.ssh, options.destination, 'utf8', (err, dest) ->
+            options.log? "Mecano `write`: read target [DEBUG]"
+            fs.readFile options.ssh, options.target, 'utf8', (err, dest) ->
               return callback err if err
-              destination = dest if options.diff # destination content only use by diff
-              destinationHash = string.hash dest
+              target = dest if options.diff # target content only use by diff
+              targetHash = string.hash dest
               do_render()
           exists()
         do_render = ->
@@ -388,10 +388,10 @@ require('mecano').write({
             content += options.eof
           do_diff()
         do_diff = ->
-          return do_ownership() if destinationHash is string.hash content
+          return do_ownership() if targetHash is string.hash content
           options.log? "Mecano `write`: file content has changed [WARN]"
           if options.diff
-            lines = diff.diffLines destination, content
+            lines = diff.diffLines target, content
             options.diff lines if typeof options.diff is 'function'
             if options.stdout
               count_added = count_removed = 0
@@ -411,28 +411,28 @@ require('mecano').write({
                     options.stdout.write "#{pad padsize, ''+(count_removed)} - #{line}\n"
           do_backup()
         do_backup = ->
-          return do_write() if not options.backup or not destinationHash
+          return do_write() if not options.backup or not targetHash
           options.log? "Mecano `write`: create backup [WARN]"
           backup = options.backup
           backup = ".#{Date.now()}" if backup is true
-          backup = "#{options.destination}#{backup}"
+          backup = "#{options.target}#{backup}"
           copy
             ssh: options.ssh
-            source: options.destination
-            destination: backup
+            source: options.target
+            target: backup
           , (err) ->
             return callback err if err
             do_write()
         do_write = ->
-          if typeof options.destination is 'function'
-            options.log? "Mecano `write`: write destination with user function [INFO]"
-            options.destination content
+          if typeof options.target is 'function'
+            options.log? "Mecano `write`: write target with user function [INFO]"
+            options.target content
             do_end()
           else
-            options.log? "Mecano `write`: write destination [INFO]"
+            options.log? "Mecano `write`: write target [INFO]"
             options.flags ?= 'a' if append
             # Ownership and permission are also handled
-            fs.writeFile options.ssh, options.destination, content, options, (err) ->
+            fs.writeFile options.ssh, options.target, content, options, (err) ->
               return callback err if err
               options.log? "Mecano `write`: content has changed [INFO]"
               modified = true
@@ -441,8 +441,8 @@ require('mecano').write({
           return do_permissions() unless options.uid? and options.gid?
           chown
             ssh: options.ssh
-            destination: options.destination
-            stat: destinationStat
+            target: options.target
+            stat: targetStat
             uid: options.uid
             gid: options.gid
             log: options.log
@@ -454,8 +454,8 @@ require('mecano').write({
           return do_end() unless options.mode?
           chmod
             ssh: options.ssh
-            destination: options.destination
-            stat: destinationStat
+            target: options.target
+            stat: targetStat
             mode: options.mode
             log: options.log
           , (err, chmoded) ->

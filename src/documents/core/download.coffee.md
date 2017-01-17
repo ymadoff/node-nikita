@@ -12,10 +12,10 @@ In local mode (with an SSH connection), the `http` protocol is handled with the
 *   `source`   
     File, HTTP URL, FTP, GIT repository. File is the default protocol if source
     is provided without any.   
-*   `destination`   
+*   `target`   
     Path where the file is downloaded.   
 *   `force`   
-    Overwrite destination file if it exists.   
+    Overwrite target file if it exists.   
 *   `ssh` (object|ssh2)   
     Run the action on a remote server using SSH, an ssh2 instance or an
     configuration object used to initialize the SSH connection.   
@@ -38,7 +38,7 @@ In local mode (with an SSH connection), the `http` protocol is handled with the
 ```js
 require('mecano').download({
   source: 'file://path/to/something',
-  destination: 'node-sigar.tgz'
+  target: 'node-sigar.tgz'
 }, function(err, downloaded){
   console.log(err ? err.message : 'File was downloaded: ' + downloaded);
 });
@@ -49,7 +49,7 @@ require('mecano').download({
 ```coffee
 mecano.download
   source: 'https://github.com/wdavidw/node-mecano/tarball/v0.0.1'
-  destination: 'node-sigar.tgz'
+  target: 'node-sigar.tgz'
 , (err, downloaded) -> ...
 ```
 
@@ -58,7 +58,7 @@ mecano.download
 ```coffee
 mecano.download
   source: 'ftp://myhost.com:3334/wdavidw/node-mecano/tarball/v0.0.1'
-  destination: 'node-sigar.tgz'
+  target: 'node-sigar.tgz'
   user: 'johndoe',
   pass: '12345'
 , (err, downloaded) -> ...
@@ -69,31 +69,31 @@ mecano.download
     module.exports = (options, callback) ->
       wrap @, arguments, (options, callback) ->
         # Validate parameters
-        {destination, source, md5sum} = options
+        {target, source, md5sum} = options
         # md5sum is used to validate the download
         return callback new Error "Missing source: #{source}" unless source
-        return callback new Error "Missing destination: #{destination}" unless destination
+        return callback new Error "Missing target: #{target}" unless target
         options.force ?= false
-        stageDestination = "#{destination}.#{Date.now()}#{Math.round(Math.random()*1000)}"
+        stageDestination = "#{target}.#{Date.now()}#{Math.round(Math.random()*1000)}"
         # Start real work
         prepare = () ->
-          options.log? "Mecano `download`: Check if destination exists"
+          options.log? "Mecano `download`: Check if target exists"
           # Note about next line: ssh might be null with file, not very clear
-          fs.exists options.ssh, destination, (err, exists) ->
+          fs.exists options.ssh, target, (err, exists) ->
             # If we are forcing
             if options.force
               # Note, we should be able to move this before the "exists" check just above
               # because we don't seem to use. Maybe it still here because we were
-              # expecting to remove the existing destination before downloading.
+              # expecting to remove the existing target before downloading.
               download()
             # If the file exists and we have a checksum to compare and we are not forcing
             else if exists and md5sum
               # then we compute the checksum of the file
-              misc.file.hash options.ssh, destination, 'md5', (err, hash) ->
+              misc.file.hash options.ssh, target, 'md5', (err, hash) ->
                 return callback err if err
                 # And compare with the checksum provided by the user
                 return callback() if hash is md5sum
-                fs.unlink options.ssh, destination, (err) ->
+                fs.unlink options.ssh, target, (err) ->
                   return callback err if err
                   download()
             # Get the checksum of the current file
@@ -154,7 +154,7 @@ mecano.download
                 # No test against this but error in case
                 # of connection issue leave an empty file
                 remove
-                  destination: stageDestination
+                  target: stageDestination
                 , callback
         checksum = ->
           return unstage() unless md5sum
@@ -167,7 +167,7 @@ mecano.download
               callback new Error "Invalid checksum, found \"#{hash}\" instead of \"#{md5sum}\""
         unstage = ->
           # Note about next line: ssh might be null with file, not very clear
-          # fs.rename options.ssh, stageDestination, destination, (err) ->
+          # fs.rename options.ssh, stageDestination, target, (err) ->
           #   return callback err if err
           #   downloaded++
           #   callback()
@@ -175,7 +175,7 @@ mecano.download
           move
             ssh: options.ssh
             source: stageDestination
-            destination: destination
+            target: target
             source_md5: md5sum
             log: options.log
           , (err, moved) ->

@@ -127,7 +127,7 @@ require('mecano').krb5_delrinc({
           chown
             ssh: options.ssh
             log: options.log
-            destination: options.keytab
+            target: options.keytab
             uid: options.uid
             gid: options.gid
           , (err, chowned) ->
@@ -139,7 +139,7 @@ require('mecano').krb5_delrinc({
           chmod
             ssh: options.ssh
             log: options.log
-            destination: options.keytab
+            target: options.keytab
             mode: options.mode
           , (err, chmoded) ->
             return callback err if err

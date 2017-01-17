@@ -77,7 +77,7 @@ require('mecano').ldap_schema({
         do_dir = ->
           options.log? 'Create ldif directory'
           mkdir
-            destination: ldif
+            target: ldif
             ssh: options.ssh
           , (err, executed) ->
             return callback err if err
@@ -86,14 +86,14 @@ require('mecano').ldap_schema({
           options.log? 'Copy schema'
           copy
             source: options.schema
-            destination: schema
+            target: schema
             ssh: options.ssh
           , (err, copied) ->
             return callback err if err
             options.log? 'Prepare configuration'
             write
               content: "include #{schema}"
-              destination: conf
+              target: conf
               ssh: options.ssh
               log: options.log
             , (err) ->
@@ -114,7 +114,7 @@ require('mecano').ldap_schema({
           options.log? 'Rename configuration'
           move
             source: "#{ldif}/cn=config/cn=schema/cn={0}#{options.name}.ldif"
-            destination: "#{ldif}/cn=config/cn=schema/cn=#{options.name}.ldif"
+            target: "#{ldif}/cn=config/cn=schema/cn=#{options.name}.ldif"
             force: true
             ssh: options.ssh
             log: options.log
@@ -125,7 +125,7 @@ require('mecano').ldap_schema({
         do_configure = ->
           options.log? 'Prepare ldif'
           write
-            destination: "#{ldif}/cn=config/cn=schema/cn=#{options.name}.ldif"
+            target: "#{ldif}/cn=config/cn=schema/cn=#{options.name}.ldif"
             write: [
               match: /^dn: cn.*$/mg
               replace: "dn: cn=#{options.name},cn=schema,cn=config"
@@ -178,7 +178,7 @@ require('mecano').ldap_schema({
         do_clean = ->
           options.log? 'Clean up'
           remove
-            destination: tempdir
+            target: tempdir
             ssh: options.ssh
           , (err, removed) ->
             callback err, modified

@@ -17,7 +17,7 @@ of the directory to create.
     Default to "0755".   
 *   `directory`   
     Path or array of paths.   
-*   `destination`   
+*   `target`   
     Alias for `directory`.   
 *   `exclude`   
     Regular expression.   
@@ -50,7 +50,7 @@ require('mecano').mkdir('./some/dir', function(err, created){
 ```js
 require('mecano').mkdir({
   ssh: ssh,
-  destination: './some/dir',
+  target: './some/dir',
   uid: 'a_user',
   gid: 'a_group'
   mode: 0o0777 // or '777'
@@ -67,7 +67,7 @@ require('mecano').mkdir({
         # Validate parameters
         options = { directory: options } if typeof options is 'string'
         options.directory ?= options.source
-        options.directory ?= options.destination
+        options.directory ?= options.target
         return callback new Error 'Missing directory option' unless options.directory?
         cwd = options.cwd ? process.cwd()
         options.directory = [options.directory] unless Array.isArray options.directory
@@ -136,7 +136,7 @@ require('mecano').mkdir({
               return do_chmod() unless options.uid? and options.gid?
               chown
                 ssh: options.ssh
-                destination: directory
+                target: directory
                 stat: stat
                 uid: options.uid
                 gid: options.gid
@@ -149,7 +149,7 @@ require('mecano').mkdir({
               return callback() unless options.mode
               chmod
                 ssh: options.ssh
-                destination: directory
+                target: directory
                 stat: stat
                 mode: options.mode
                 log: options.log

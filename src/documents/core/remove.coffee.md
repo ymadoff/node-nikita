@@ -7,7 +7,7 @@ Recursively remove files, directories and links.
 
 *   `source`   
     File, directory or glob (pattern matching based on wildcard characters).   
-*   `destination`      
+*   `target`      
     Alias for "source".   
 *   `ssh` (object|ssh2)   
     Run the action on a remote server using SSH, an ssh2 instance or an
@@ -62,7 +62,7 @@ require('mecano').remove([
       wrap @, arguments, (options, callback) ->
         # Validate parameters
         options = source: options if typeof options is 'string'
-        options.source ?= options.destination
+        options.source ?= options.target
         return callback new Error "Missing source" unless options.source?
         # Start real work
         modified = false

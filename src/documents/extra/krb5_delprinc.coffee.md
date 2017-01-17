@@ -62,7 +62,7 @@ require('mecano').krb5_delrinc({
           return do_end() unless options.keytab
           remove
             ssh: options.ssh
-            destination: options.keytab
+            target: options.keytab
           , (err, removed) ->
             return callback err if err
             modified++ if removed

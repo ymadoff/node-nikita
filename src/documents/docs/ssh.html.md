@@ -97,7 +97,7 @@ connect({
   if(err) return process.exit(1);
   mecano.touch({
     ssh: ssh
-    destination: '/tmp/a_file'
+    target: '/tmp/a_file'
   }, function(err, written){
     if(err) return process.exit(1);
     console.log('File written: '+written);
@@ -116,7 +116,7 @@ mecano.touch({
     username: 'root',
     private_key_path: '~/.ssh/id_rsa'
   },
-  destination: '/tmp/a_file'
+  target: '/tmp/a_file'
 }, function(err, written){
   if(err) return process.exit(1);
   console.log('File written: '+written);

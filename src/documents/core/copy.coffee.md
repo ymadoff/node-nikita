@@ -9,12 +9,12 @@ overwrite it.
 
 *   `source`   
     The file or directory to copy.   
-*   `destination`   
+*   `target`   
     Where the file or directory is copied.   
 *   `gid`   
     Group name or id who owns the file.   
 *   `not_if_exists`   
-    Equals destination if true.   
+    Equals target if true.   
 *   `mode`   
     Permissions of the file or the parent directory.   
 *   `ssh` (object|ssh2)   
@@ -48,7 +48,7 @@ overwrite it.
 ```js
 require('mecano').copy({
   source: '/etc/passwd',
-  destination: '/etc/passwd.bck',
+  target: '/etc/passwd.bck',
   uid: 'my_user'
   gid: 'my_group'
   mode: '0755'
@@ -63,10 +63,10 @@ require('mecano').copy({
       wrap @, arguments, (options, callback) ->
         # Validate parameters
         return callback new Error 'Missing source' unless options.source
-        return callback new Error 'Missing destination' unless options.destination
+        return callback new Error 'Missing target' unless options.target
         # return callback new Error 'SSH not yet supported' if options.ssh
-        # Cancel action if destination exists ? really ? no md5 comparaison, strange
-        # options.not_if_exists = options.destination if options.not_if_exists is true
+        # Cancel action if target exists ? really ? no md5 comparaison, strange
+        # options.not_if_exists = options.target if options.not_if_exists is true
         # Start real work
         modified = false
         srcStat = null
@@ -76,13 +76,13 @@ require('mecano').copy({
           # Source must exists
           return callback err if err
           srcStat = stat
-          options.log? "Mecano `copy`: stat destination file"
-          fs.stat options.ssh, options.destination, (err, stat) ->
+          options.log? "Mecano `copy`: stat target file"
+          fs.stat options.ssh, options.target, (err, stat) ->
             return callback err if err and err.code isnt 'ENOENT'
             dstStat = stat
             sourceEndWithSlash = options.source.lastIndexOf('/') is options.source.length - 1
             if srcStat.isDirectory() and dstStat and not sourceEndWithSlash
-              options.destination = path.resolve options.destination, path.basename options.source
+              options.target = path.resolve options.target, path.basename options.source
             if srcStat.isDirectory()
             then do_directory options.source, (err) -> callback err, modified
             else do_copy options.source, (err) -> callback err, modified
@@ -97,54 +97,54 @@ require('mecano').copy({
             .on 'both', callback
         do_copy = (source, callback) ->
           if srcStat.isDirectory()
-            destination = path.resolve options.destination, path.relative options.source, source
+            target = path.resolve options.target, path.relative options.source, source
           else if not srcStat.isDirectory() and dstStat?.isDirectory()
-            destination = path.resolve options.destination, path.basename source
+            target = path.resolve options.target, path.basename source
           else
-            destination = options.destination
+            target = options.target
           fs.stat options.ssh, source, (err, stat) ->
             return callback err if err
             if stat.isDirectory()
-            then do_copy_dir source, destination
-            else do_copy_file source, destination
-          do_copy_dir = (source, destination) ->
-            options.log? "Mecano `copy`: create directory #{destination}"
+            then do_copy_dir source, target
+            else do_copy_file source, target
+          do_copy_dir = (source, target) ->
+            options.log? "Mecano `copy`: create directory #{target}"
             # todo, add permission
-            fs.mkdir options.ssh, destination, (err) ->
+            fs.mkdir options.ssh, target, (err) ->
               return callback() if err?.code is 'EEXIST'
               return callback err if err
               modified = true
               do_end()
           # Copy a file
-          do_copy_file = (source, destination) ->
-            misc.file.compare options.ssh, [source, destination], (err, md5) ->
+          do_copy_file = (source, target) ->
+            misc.file.compare options.ssh, [source, target], (err, md5) ->
               # Destination may not exists
               return callback err if err and err.message.indexOf('Does not exist') isnt 0
               # File are the same, we can skip copying
-              return do_chown destination if md5
-              options.log? "Mecano `copy`: Copy file from #{source} into #{destination}"
-              misc.file.copyFile options.ssh, source, destination, (err) ->
+              return do_chown target if md5
+              options.log? "Mecano `copy`: Copy file from #{source} into #{target}"
+              misc.file.copyFile options.ssh, source, target, (err) ->
                 return callback err if err
                 modified = true
-                do_chown destination
-          do_chown = (destination) ->
+                do_chown target
+          do_chown = (target) ->
             return do_chmod() if not options.uid and not options.gid
             chown
               ssh: options.ssh
               log: options.log
-              destination: destination
+              target: target
               uid: options.uid
               gid: options.gid
             , (err, chowned) ->
               return callback err if err
               modified = true if chowned
               do_chmod()
-          do_chmod = (destination) ->
+          do_chmod = (target) ->
             return do_end() if not options.mode
             chmod
               ssh: options.ssh
               log: options.log
-              destination: options.destination
+              target: options.target
               mode: options.mode
             , (err, chmoded) ->
               return callback err if err

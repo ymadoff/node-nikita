@@ -9,7 +9,7 @@ moment, supported extensions are '.tgz', '.tar.gz' and '.zip'.
 
 *   `source`   
     Archive to decompress.   
-*   `destination`   
+*   `target`   
     Default to the source parent directory.   
 *   `format`   
     One of 'tgz', 'tar' or 'zip'.
@@ -51,7 +51,7 @@ require('mecano').extract({
       wrap @, arguments, (options, callback) ->
         # Validate parameters
         return callback new Error "Missing source: #{options.source}" unless options.source
-        destination = options.destination ? path.dirname options.source
+        target = options.target ? path.dirname options.source
         # Deal with format option
         if options.format?
           format = options.format
@@ -74,9 +74,9 @@ require('mecano').extract({
         extract = () ->
           cmd = null
           switch format
-            when 'tgz' then cmd = "tar xzf #{options.source} -C #{destination}"
-            when 'tar' then cmd = "tar xf #{options.source} -C #{destination}"
-            when 'zip' then cmd = "unzip -u #{options.source} -d #{destination}"
+            when 'tgz' then cmd = "tar xzf #{options.source} -C #{target}"
+            when 'tar' then cmd = "tar xf #{options.source} -C #{target}"
+            when 'zip' then cmd = "unzip -u #{options.source} -d #{target}"
           execute
             ssh: options.ssh
             cmd: cmd

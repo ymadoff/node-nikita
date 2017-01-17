@@ -11,7 +11,7 @@ exists.
 
 ## Options
 
-*   `destination`   
+*   `target`   
     File path where to write content to.   
 *   `ssh` (object|ssh2)   
     Run the action on a remote server using SSH, an ssh2 instance or an
@@ -28,7 +28,7 @@ exists.
 ```js
 require('mecano').touch({
   ssh: ssh,
-  destination: '/tmp/a_file'
+  target: '/tmp/a_file'
 }, function(err, touched){
   console.log(err ? err.message : 'File touched: ' + !!touched);
 });
@@ -39,10 +39,10 @@ require('mecano').touch({
     module.exports = (options, callback) ->
       wrap @, arguments, (options, callback) ->
         # Validate parameters
-        {ssh, destination, mode} = options
-        return callback new Error "Missing destination: #{destination}" unless destination
-        options.log? "Check if exists: #{destination}"
-        fs.exists ssh, destination, (err, exists) ->
+        {ssh, target, mode} = options
+        return callback new Error "Missing target: #{target}" unless target
+        options.log? "Check if exists: #{target}"
+        fs.exists ssh, target, (err, exists) ->
           return callback err if err
           return callback() if exists
           options.source = null

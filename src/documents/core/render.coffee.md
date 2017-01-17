@@ -15,7 +15,7 @@ integrated. More are added on demand.
     Templated content, bypassed if source is provided.   
 *   `source`   
     File path where to extract content from.   
-*   `destination`   
+*   `target`   
     File path where to write content to or a callback.   
 *   `context`   
     Map of key values to inject into the template.   
@@ -41,7 +41,7 @@ integrated. More are added on demand.
     Writable EventEmitter in which the standard error output of executed command
     will be piped.   
 
-If destination is a callback, it will be called with the generated content as
+If target is a callback, it will be called with the generated content as
 its first argument.   
 
 ## Callback parameters
@@ -56,7 +56,7 @@ its first argument.
 ```js
 require('mecano').render({
   source: './some/a_template.j2',
-  destination: '/tmp/a_file',
+  target: '/tmp/a_file',
   context: {
     username: 'a_user'
   }
@@ -71,7 +71,7 @@ require('mecano').render({
       wrap @, arguments, (options, callback) ->
         # Validate parameters
         return callback new Error 'Missing source or content' unless options.source or options.content
-        return callback new Error 'Missing destination' unless options.destination
+        return callback new Error 'Missing target' unless options.target
         # Start real work
         do_read_source = ->
           return do_write() unless options.source

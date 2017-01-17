@@ -7,7 +7,7 @@ Create and synchronize a git repository.
 
 *   `source`   
     Git source repository address.   
-*   `destination`   
+*   `target`   
     Directory where to clone the repository.   
 *   `revision`   
     Git revision, branch or tag.   
@@ -51,19 +51,19 @@ require('mecano').extract({
         rev = null
         # Start real work
         prepare = ->
-          fs.exists options.ssh, options.destination, (err, exists) ->
+          fs.exists options.ssh, options.target, (err, exists) ->
             return callback err if err
             return clone() unless exists
-            # return callback new Error "Destination not a directory, got #{options.destination}" unless stat.isDirectory()
-            gitDir = "#{options.destination}/.git"
+            # return callback new Error "Destination not a directory, got #{options.target}" unless stat.isDirectory()
+            gitDir = "#{options.target}/.git"
             fs.exists options.ssh, gitDir, (err, exists) ->
               return callback new Error "Not a git repository" unless exists
               log()
         clone = ->
           execute
             ssh: options.ssh
-            cmd: "git clone #{options.source} #{options.destination}"
-            cwd: path.dirname options.destination
+            cmd: "git clone #{options.source} #{options.target}"
+            cwd: path.dirname options.target
             log: options.log
             stdout: options.stdout
             stderr: options.stderr
@@ -74,7 +74,7 @@ require('mecano').extract({
           execute
             ssh: options.ssh
             cmd: "git log --pretty=format:'%H' -n 1"
-            cwd: options.destination
+            cwd: options.target
             log: options.log
             stdout: options.stdout
             stderr: options.stderr
@@ -84,7 +84,7 @@ require('mecano').extract({
             execute
               ssh: options.ssh
               cmd: "git rev-list --max-count=1 #{options.revision}"
-              cwd: options.destination
+              cwd: options.target
               log: options.log
               stdout: options.stdout
               stderr: options.stderr
@@ -97,7 +97,7 @@ require('mecano').extract({
           execute
             ssh: options.ssh
             cmd: "git checkout #{options.revision}"
-            cwd: options.destination
+            cwd: options.target
             log: options.log
             stdout: options.stdout
             stderr: options.stderr

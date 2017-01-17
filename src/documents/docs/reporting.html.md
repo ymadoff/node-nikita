@@ -54,7 +54,7 @@ information. All the functions calling `write` will inherit this functionnality.
 
 ```js
 mecano.write({
-  destination: '/tmp/file'
+  target: '/tmp/file'
   diff: function(diff){
     console.log(diff);
   }
@@ -71,7 +71,7 @@ information. All the functions calling `write` will inherit this functionnality.
 
 ```js
 mecano.write({
-  destination: '/tmp/file'
+  target: '/tmp/file'
   backup: true
 }, function(err){
   console.log(err ? err.message : 'ok');

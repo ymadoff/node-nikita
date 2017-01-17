@@ -49,7 +49,7 @@ second argument is an integer indicating if the run lead to any modification.
 
 ```js
 mecano.write({
-  destination: '/etc/hosts',
+  target: '/etc/hosts',
   content: "127.0.0.1 localhost"
 }, function(err, written){
   if(err){
@@ -66,10 +66,10 @@ mecano.write({
 
 ```js
 mecano.write([{
-  destination: '/etc/hosts',
+  target: '/etc/hosts',
   content: "127.0.0.1 localhost"
 },{
-  destination: '/etc/resolv.conf',
+  target: '/etc/resolv.conf',
   content: "nameserver 192.168.1.1"
 }], function(err, written){
   if(err){
