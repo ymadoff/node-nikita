@@ -6,14 +6,4 @@ sort: 2
 
 # Usages
 
-Tutorial start now
-
-Tutorial start now
-
-Tutorial start now
-
-Tutorial start now
-
-Tutorial start now
-
-Tutorial start now
+Learn how to take benefit from all the power functionnalities offered by Nikita.

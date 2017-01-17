@@ -1,5 +1,5 @@
 ---
-title: Aspects and events
+title: Log and events
 layout: Page
 sort: 9
 ---

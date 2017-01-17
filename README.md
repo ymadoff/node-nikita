@@ -17,3 +17,14 @@ npm start
 ```sh
 npm run build
 ```
+## Update
+
+mkdir newprojet
+cd newproject
+npm install -g phenomic
+phenomic setup
+cp -rp package.json ../nikita/package.json
+.. tweak the package json file
+npm install --save \
+  react-toolbox material-icons sass-loader \
+  node-sass stylus stylus-loader

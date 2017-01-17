@@ -8,23 +8,17 @@ import OssSvg from "../icons/oss.svg"
 import styles from "./index.css"
 
 const Footer = (props, { router, metadata: { pkg }, collection }) => {
-  // const { router, metadata: { pkg }, collection } = this.context;
-  const quick = enhanceCollection(collection, {
-    // filter: { quick: true },
-    filter: { layout: "Section" },
-    sort: "sort",
-  })
-  const contribute = enhanceCollection(collection, {
-    filter: { contribute: true },
-    sort: "sort",
-  })
   return (
     <footer className={ styles.footer }>
       <nav className={ styles.quick }>
         <p>{ "Quick Navigation" }</p>
         <ul>
         {
-          quick.map((page) => {
+          enhanceCollection(collection, {
+            filter: { layout: "Section" },
+            sort: "sort",
+          }).map((page) => {
+            console.log(page)
             const handleToggle = (event) => {
               event.preventDefault()
               router.push(page.__url)
@@ -43,7 +37,7 @@ const Footer = (props, { router, metadata: { pkg }, collection }) => {
         </ul>
       </nav>
       <nav>
-        <p>{ "Contribute" }</p>
+        <p>{ "Community" }</p>
         <ul>
           <Link
             className={ styles.link }
@@ -58,7 +52,10 @@ const Footer = (props, { router, metadata: { pkg }, collection }) => {
             { "Report a bug" }
           </Link>
         {
-          contribute.map((page) => {
+          enhanceCollection(collection, {
+            sort: "sort",
+          }).map((page) => {
+            if (!page.community) return;
             const handleToggle = (event) => {
               event.preventDefault()
               router.push(page.__url)

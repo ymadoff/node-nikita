@@ -2,7 +2,7 @@
 title: License
 layout: Page
 sort: 4
-contribute: true
+community: true
 ---
 
 # Software License Agreement (BSD License)

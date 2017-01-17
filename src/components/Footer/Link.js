@@ -15,7 +15,6 @@ class Link extends React.Component {
     router: PropTypes.object,
   }
   isActive() {
-    console.log(this.props.href, this.context.router.isActive(this.props.href))
     return cx(
       styles.link,
       this.context.router.isActive(this.props.href) && styles.active
