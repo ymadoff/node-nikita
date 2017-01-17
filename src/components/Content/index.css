@@ -1,0 +1,11 @@
+.content {
+  /*flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: scroll !important;*/
+  padding: 2rem;
+}
+
+.content p {
+  text-align: justify;
+}

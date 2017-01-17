@@ -1,9 +1,6 @@
-.*
-/node_modules
-/out
-*.iml
-src/files/vendor/components-bootstrap
-src/files/vendor/jquery
-.docpad.db
-!.bowerrc
-!.gitignore
+# node / npm
+node_modules
+*.log
+
+# phenomic build
+dist

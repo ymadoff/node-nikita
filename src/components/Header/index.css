@@ -1,0 +1,100 @@
+:root {
+  --nav-item-padding: 0.5rem;
+}
+
+.appBar {
+  position: relative;
+  justify-content: space-between;
+  background-color: #000 !important;
+  background-image: url("./header.png") !important;
+  /*background-size: 100% auto;*/
+  background-size: contain !important;
+  background-attachment: fixed !important;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  /*justify-content: space-around;*/
+  justify-content: space-between;
+  padding: 0 1rem 0 0;
+}
+
+.texts {
+  /*flex-grow: 2;*/
+}
+
+.title {
+  color: #bc1b00 !important;
+  display: inline-block;
+  font-size: 2rem;
+  font-weight:bold;
+  letter-spacing: .3rem;
+  text-shadow: 0 0 0.4rem rgba(255,255,255, 0.15)
+  /*line-height: 4rem;*/
+}
+
+.headline {
+  color: #fff;
+  margin-left: 1rem;
+  /*display: inline-block;
+  line-height: 4rem;*/
+}
+@media screen and (max-width: 1000px) {
+  .headline {
+    display: none;
+  }
+}
+
+.nav {
+  /*float: right;
+  position: relative;*/
+  text-align: right;
+  /*flex-grow: 10;*/
+}
+
+.github {
+  color: #fff !important;
+  text-decoration: none;
+}
+.github svg{
+  height: 1.3rem;
+  fill: #fff;
+}
+
+/*
+.header {
+  color: var(--mainColorContrasted);
+  background: var(--mainColor);
+}
+
+.nav {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  max-width: calc(60rem + (var(--nav-item-padding) * 2));
+  margin: 0 auto;
+  padding: 0;
+  line-height: 3rem;
+}
+
+.navPart1,
+.navPart2 {
+  display: flex;
+  flex-direction: row;
+}
+
+.link {
+  display: flex;
+  align-items: center;
+  padding: 0 var(--nav-item-padding);
+  color: inherit;
+  text-decoration: none;
+}
+
+.link svg {
+  fill: currentColor;
+  opacity: 0.5;
+  margin-right: 0.5rem;
+  width: 1.5rem;
+  height: 1.5rem;
+  vertical-align: middle;
+}*/
